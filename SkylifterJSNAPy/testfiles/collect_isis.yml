@@ -1,0 +1,17 @@
+tests_include:
+  - collect_show_isis_interface_logical-system_all
+  - collect_show_isis_adjacency_logical-system_all
+  - collect_show_isis_database_logical-system_all
+  - collet_show_isis_database_detail_logical-system_all
+
+collect_show_isis_interface_logical-system_all:
+  - command: show isis interface logical-system MA-1001-1
+
+collect_show_isis_adjacency_logical-system_all:
+  - command: show isis adjacency logical-system MA-1001-1
+
+collect_show_isis_database_logical-system_all:
+  - command: show isis database logical-system MA-1001-1
+  
+collet_show_isis_database_detail_logical-system_all:
+  - command: show isis database extensive logical-system MA-1001-1

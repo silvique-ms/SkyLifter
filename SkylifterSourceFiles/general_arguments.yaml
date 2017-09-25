@@ -1,0 +1,38 @@
+---
+Ubuntu_VM:
+ vm_path: '/Users/silvia/Documents/Virtual Machines.localized/vMX.vmwarevm/vMX.vmx'
+ vm_name: 'vMX'
+ vm_host: '172.16.226.20'
+ vm_username: 'silvia'
+ vm_password: 'SilviaMurgescu'
+ vm_sudo_password: 'SilviaMurgescu'  
+
+vMX_router: 
+ vmx_hostname: '172.16.226.10'
+ vmx_username: 'silvia'
+ vmx_password: 'SilviaMurgescu'
+ 
+   
+Skylifter_file_system:
+ source_folder_name: 'SkylifterSourceFiles'
+ base_conf_file_name: 'vmx_base.conf'
+ 
+ new_conf_file_name: '_from_Template'
+ new_conf_folder_name: 'NewConfFiles'
+ save_conf_folder_name: 'SavedConfFiles'
+ variable_folder_name: 'VariableFiles'
+ 
+Backhaul_project:
+  project_name: 'Backhaul'
+  prj_source_folder_name: 'SkylifterSourceFiles'
+  
+  jinja2_system_file_name: 'system_template_config.j2'
+  jinja2_mpls_file_name: 'mpls_template_config.j2'
+  jinja2_bgp_file_name: 'bgp_template_config.j2'
+  
+  xlsx_file_name: 'Network_Information.xlsx'
+  sheet_name: 'Interfaces'
+  
+  prj_destination_folder_name: 'SkylifterDestFiles'
+  yaml_file_name: 'LSDataYAML'
+  py_file_name: 'LSData'

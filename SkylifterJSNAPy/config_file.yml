@@ -1,0 +1,16 @@
+---
+hosts:
+ - include: devices.yml
+   group: vMX
+
+test:
+ - test_is_equal.yml
+ - test_is_in.yml
+ - test_sw_version.yml
+
+# sqlite:
+#  - store_in_sqlite: yes
+#      check_from_sqlite: yes
+#      database_name: jbb.db
+ 
+# mail: send_mail.yml

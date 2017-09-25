@@ -1,0 +1,43 @@
+logical-systems { {% for ls_key, ls_vars in Logical_systems.iteritems() %}
+    {{ ls_key }} {
+       interfaces { {% for key, val in ls_vars.iteritems() %} {% if val.ifd  == "lo0" %}
+             {{ val.ifd }} {
+                unit {{ val.ifl }} {
+                    description {{ val.description }};
+                    family inet {
+                        address {{ val.ipv4_ifa }}/{{val.ipv4_cidr}};
+                    }
+                    family mpls;
+                    family iso {
+                        address {{ val.iso_ifa }};
+                    }
+                 }
+             } {% else %}
+             {{ val.ifd }} {
+                unit {{ val.ifl }} {
+                    description {{ val.description }};
+                    vlan-id {{ val.ifl }};
+                    family inet {
+                        address {{ val.ipv4_ifa }}/{{val.ipv4_cidr}};
+                    }
+                    family mpls;
+                    family iso;
+                 }
+             } {% endif %} {% endfor %}
+        }
+        protocols {
+            rsvp { {% for key, val in ls_vars.iteritems() %}
+               interface {{ val.ifd }}.{{ val.ifl }}; {% endfor %}
+            }
+            mpls { {% for key, val in ls_vars.iteritems() %}
+                interface {{ val.ifd }}.{{ val.ifl }}; {% endfor %}
+            }
+            isis { {% for key, val in ls_vars.iteritems() %}
+                interface {{ val.ifd }}.{{ val.ifl }}; {% endfor %}
+            }
+            ldp { {% for key, val in ls_vars.iteritems() %}
+                interface {{ val.ifd }}.{{ val.ifl }}; {% endfor %}
+            }
+        }
+    } {% endfor %}
+ } 
