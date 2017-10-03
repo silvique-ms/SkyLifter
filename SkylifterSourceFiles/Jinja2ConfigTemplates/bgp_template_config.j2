@@ -1,0 +1,20 @@
+{#	This template bgp configuration:
+		- groups configuration
+		- bgp protocol configuration
+#}
+logical-systems { {% for ls_key, ls_vars in BGP_values.iteritems() %}
+    {{ ls_key }} {
+        protocols {
+            bgp { {% for group_key, group_vars in ls_vars.iteritems() %}
+				group {{ group_key }} {
+				    type internal; {% for key, val in group_vars.iteritems() %} {% if key in 'local-ip' %}
+					local-address {{ val }}; {% else %}
+					neighbor {{ val }}; {% endif %}{% endfor %}
+                }{% endfor %}
+            }
+        }
+        routing-options {
+            autonomous-system 64512;
+        }
+    } {% endfor %}
+ }

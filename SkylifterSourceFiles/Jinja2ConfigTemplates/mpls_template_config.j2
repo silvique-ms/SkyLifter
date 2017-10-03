@@ -1,0 +1,16 @@
+{#	This template mpls configuration:
+		- groups configuration
+		- protocol mpls, rsvp, ldp configuration
+#}
+logical-systems { {% for ls_key, ls_vars in LSPs.iteritems() %}
+    {{ ls_key }} {
+        protocols {
+            mpls { {% for lsp_key, lsp_val in ls_vars.iteritems() %}
+				label-switched-path {{ lsp_key }} {
+					from {{ lsp_val.from }};
+					to {{ lsp_val.to }};
+                }{% endfor %}
+            }
+        }
+    } {% endfor %}
+ } 

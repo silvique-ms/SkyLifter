@@ -23,15 +23,42 @@
 # THE SOFTWARE.
 
 Files: 
+======
 - README.txt	
 - SkylifterMain.py
-- SkylifterSourceFiles
+- SkylifterSourceFiles 
 - SkylifterProjectPresentation
 - SkylifterDestFiles
 
 Python Modules:
-- SkylifterOp         	   		
+===============
+- SkylifterMainOp         	   		
 - SkylifterLabSetup
 - SkylifterConfig			
-- SkylifterDeploy					
-- SkylifterJSNAPy (not ready)			
+- SkylifterDeploy
+- SkylifterDevOp (not ready)
+- SkylifterLabSetup
+- SkylifterTables					
+- SkylifterJSNAPy (not ready)	
+
+
+TO DO Next:
+===========
+- CollectTables.py:
+	- an interface table with int_name, admin-stat, op-stat, description, protocols, MTU, ip add, iso add	
+	- make collect RPC for all the design layers: mpls, bgp, service
+- Option 0 - project description
+- Skylifter JSNAPy module
+- finish all J2 templates: mpls, bgp, service, isis with routing policies, system with RE-FF and all stuf
+- Check functions
+- Small youtube mouvie with program presentation
+- Telemetry interface for vMX - implementat
+⁃ Construieste un LSP catre PAG1 cu path bine ales si unul catre PAG2 cu path bine ales pe bucla cu metrica de la igp: va sti singur in ce directie sa ruteze! :)) 
+
+Topics to study:
+=============
+-> Telemetry
+-> InfluxDB
+-> Kafka
+-> Telegraf
+-> Grafana

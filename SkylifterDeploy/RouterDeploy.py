@@ -126,7 +126,7 @@ def mergeConfig(my_host, my_user, my_password, my_conf_file):
         dev.timeout=3*60
         
         cu=Config(dev)
-        #cu.lock()
+        cu.lock()
         cu.load(template_path=my_conf_file, merge=True)
         conf_diff=cu.diff()
      
@@ -135,12 +135,18 @@ def mergeConfig(my_host, my_user, my_password, my_conf_file):
             
             if cu.commit_check():
                 cu.commit()
-                #cu.unlock()
-                dev.close()
                 print ("\nINFO: The configuration file %s has been preccesed for the device.") % my_conf_file
+            else:
+                cu.rollback()
+                print ("\nERROR: Commit check error!")
+                
+            cu.unlock()
+            dev.close()
+                
         else:
             print "\nINFO: No new configuration need to be applied."
-            #cu.unlock()
+            cu.rollback()
+            cu.unlock()
             dev.close()
             return False
         
@@ -163,24 +169,29 @@ def overwriteConfig(my_host, my_user, my_password, my_conf_file):
         dev.timeout=3*60
         
         cu=Config(dev)
-        #cu.lock()
+        cu.lock()
         cu.load(template_path=my_conf_file, overwrite=True)
         conf_diff=cu.diff()
      
         if conf_diff:
-            print ("\nINFO: The following changes will be applied: \n %s") %conf_diff
+            print "\nINFO: The following changes will be applied: \n %s" %conf_diff
             
             if cu.commit_check():
                 cu.commit()
-                #cu.unlock()
-                dev.close()
-                print ("\nINFO: The configuration file %s has been applied on the device.") % my_conf_file
+                print ("\nINFO: The configuration file %s has been preccesed for the device.") % my_conf_file
+            else:
+                cu.rollback()
+                print ("\nERROR: Commit check error!")
+                
+            cu.unlock()
+            dev.close()
+                
         else:
             print "\nINFO: No new configuration need to be applied."
-            
-            #cu.unlock()
+            cu.rollback()
+            cu.unlock()
             dev.close()
-            return False 
+            return False
         
     except Exception, err:
         print("\nError: Encountered exception while deploying configuration:\n %s") % str(err)

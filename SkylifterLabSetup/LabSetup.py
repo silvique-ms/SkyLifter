@@ -35,6 +35,8 @@ import paramiko
 import time
 from vmfusion import vmrun
 
+from SkylifterDeploy import RouterDeploy
+
 def start_Ubuntu_vm(vm_path, vm_name):
     
     ###################################################
@@ -146,4 +148,76 @@ def start_vMX(vm_host, my_username, my_password, sudo_password):
         print"\nError: Encountered exception while starting the Guest vMX router. \nException is: %s.\n" %str(err)
         return False
         
+    return True
+
+
+def virtualLabAdmin(ubuntu_vm_dict, vmx_dict, files_dict, option):
+    
+    # Arguments for Ubuntu VM
+    vm_path = ubuntu_vm_dict['vm_path']
+    vm_name = ubuntu_vm_dict['vm_name']
+    vm_host = ubuntu_vm_dict['vm_host']
+    vm_username = ubuntu_vm_dict['vm_username']
+    vm_password = ubuntu_vm_dict['vm_password']
+    vm_sudo_password = ubuntu_vm_dict['vm_sudo_password']
+        
+    # Arguments for vMX router
+    vmx_hostname = vmx_dict['vmx_hostname']
+    vmx_username = vmx_dict['vmx_username']
+    vmx_password = vmx_dict['vmx_password']
+
+    # Arguments for General File System
+    base_conf_file_name = files_dict['base_conf_file_name']
+    source_folder_name = files_dict['source_folder_name']
+
+    try:
+        if option=='1':
+            print ('''
+#==========================================================================#
+#  Running option 1: Start Host Ubuntu VM and vMX router                    #
+#==========================================================================#''')          
+            start_rez = start_Ubuntu_vm(vm_path, vm_name)
+            # Ubuntu Host is off
+            if start_rez == 1: 
+                print ("\nINFO: Ubunu Host VM have been Started!")             
+                if start_vMX(vm_host, vm_username, vm_password, vm_sudo_password):
+                    print ("\nINFO: Guest vMX router have been Started!") 
+            # Ubuntu Host is on and restart have been selected
+            elif start_rez == 2:
+                print ("\nINFO: Host Ubuntu VM have been Restarted!")             
+                if start_vMX(vm_host, vm_username, vm_password, vm_sudo_password):
+                    print ("\nINFO: Guest vMX router have been Started!") 
+            # Ubuntu Host is on and no restart have been selected
+            elif start_rez == 3:
+                print ("\nINFO: Skip Host Ubuntu VM restarting!")   
+                opt='n'
+                opt=raw_input("\nWould you like to restart guest vMX router? (y/N) _") 
+                if opt=='y' or opt=='Y':
+                    print '\nINFO: Reboot of vMX router has been intiated! Please wait ...'                           
+                    if start_vMX(vm_host, vm_username, vm_password, vm_sudo_password):
+                        print ("\nINFO: Guest vMX router have been restarted!") 
+                else: 
+                    print ("\nINFO: No Restart for guest vMX router has been selected!")
+                    
+        elif option=='2':
+            print ('''
+#==========================================================================#
+#  Running option 2: Apply and commit a base configuration into            #
+#  the Guest vMX virtual router: reset vMX to base config!                 #
+#==========================================================================#''')
+            conf_file = source_folder_name+'/'+base_conf_file_name  
+            RouterDeploy.overwriteConfig(vmx_hostname, vmx_username, vmx_password, conf_file)
+        
+        elif option=='3':
+            print ('''
+#==========================================================================#
+#  Running option 6: Stop vMX Ubuntu Host.                                 #
+#==========================================================================#''')
+            if stop_Ubuntu_vm(vm_path, vm_name):
+                print ("\nINFO: Host VM have been Stoped!")   
+        
+    except Exception, err:
+        print("\nError: \n %s") % str(err)
+        return False
+    
     return True

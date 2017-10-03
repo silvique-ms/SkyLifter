@@ -1,0 +1,136 @@
+{#	This template isis configuration:
+		- groups configuration: MA, PAG, AG, Core
+		- isis protocol configuration
+#}
+groups {
+    MA-isis {
+        logical-systems {
+            <MA-*> {
+                protocols {
+                    isis {
+                        level 1 disable;
+                        level 2 {
+                            authentication-key juniper;
+                            authentication-type md5;
+                        }
+                        interface <ge-*> {
+                            point-to-point;
+                            bfd-liveness-detection {
+                                minimum-interval 2;
+                                multiplier 3;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    PAG-isis {
+        logical-systems {
+            <PAG-*> {
+                protocols {
+                    isis {
+                        level 1 {
+                            authentication-key juniper;
+                            authentication-type md5;
+                        }
+                        level 2 {
+                            authentication-key juniper;
+                            authentication-type md5;
+                        }
+                        interface <ge-*> {
+                            point-to-point;
+                            bfd-liveness-detection {
+                                minimum-interval 2;
+                                multiplier 3;
+                            }           
+                        }
+                    }
+                }
+            }
+        }
+    }
+    AG-isis {
+        logical-systems {
+            <AG-*> {
+                protocols {
+                    isis {
+                        level 1 {
+                            authentication-key juniper;
+                            authentication-type md5;
+                        }
+                        level 2 {
+                            authentication-key juniper;
+                            authentication-type md5;
+                        }
+                        interface <ge-*> {
+                            point-to-point;
+                            bfd-liveness-detection {
+                                minimum-interval 2;
+                                multiplier 3;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    Core-isis {
+        logical-systems {
+            <Core-*> {
+                protocols {
+                    isis {
+                        level 1 disable;
+                        level 2 {
+                            authentication-key juniper;
+                            authentication-type md5;
+                        }
+                        interface <ge-*> {
+                            point-to-point;
+                            bfd-liveness-detection {
+                                minimum-interval 2;
+                                multiplier 3;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+logical-systems { {% for ls_key, ls_vars in Logical_systems.iteritems() %}
+    {{ ls_key }} { {% for key, vars in ls_vars.iteritems() %} {% if key == "host_type" %}
+        protocols {
+            isis {
+               apply-groups {{ vars }}-isis;
+            }
+        }
+    } {% endif %} {% endfor %} {% endfor %}        
+}
+
+logical-systems { {% for ls_key, ls_vars in Logical_systems.iteritems() %}
+    {{ ls_key }} { {% for key, vars in ls_vars.iteritems() %} {% if key == "INTERFACES" %}
+       interfaces { {% for int_key, int_val in vars.iteritems() %} {% if int_val.ifd  == "lo0" %} 
+             {{ int_val.ifd }} {
+                unit {{ int_val.ifl }} {
+                    family iso {
+                        address {{ int_val.iso_ifa }};
+                    }
+                 }
+             } {% elif int_val.int_type != 'customer' %}
+             {{ int_val.ifd }} {
+                unit {{ int_val.ifl }} {
+                    vlan-id {{ int_val.ifl }};
+                    family iso;
+                 }
+             } {% endif %} {% endfor %}
+        }
+        protocols {
+            isis { {% for int_key, int_val in vars.iteritems() %} {% if int_val.int_type != 'customer' %}
+                interface {{ int_val.ifd }}.{{ int_val.ifl }}; {% endif %} {% endfor %}
+            }
+        } 
+    } {% endif %} {% endfor %} {% endfor %}
+ } 
+ 

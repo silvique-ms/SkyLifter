@@ -1,4 +1,8 @@
 ---
+# General variables needed for the virtual lab
+###############################################
+
+# Host Ubuntu variables
 Ubuntu_VM:
  vm_path: '/Users/silvia/Documents/Virtual Machines.localized/vMX.vmwarevm/vMX.vmx'
  vm_name: 'vMX'
@@ -7,32 +11,53 @@ Ubuntu_VM:
  vm_password: 'SilviaMurgescu'
  vm_sudo_password: 'SilviaMurgescu'  
 
+# Guest vMX router variables
 vMX_router: 
  vmx_hostname: '172.16.226.10'
  vmx_username: 'silvia'
  vmx_password: 'SilviaMurgescu'
  
+# General variables needed for file system
+###########################################
    
 Skylifter_file_system:
+# surce folder and files
  source_folder_name: 'SkylifterSourceFiles'
  base_conf_file_name: 'vmx_base.conf'
  
+ # variable and configuration folder and files
  new_conf_file_name: '_from_Template'
  new_conf_folder_name: 'NewConfFiles'
  save_conf_folder_name: 'SavedConfFiles'
  variable_folder_name: 'VariableFiles'
+ devop_rfc_folder_name: 'DevOpFilesRPC'
+ devop_tables_view_folder_name: 'DevOpFilesTableViews'
+
+# Variables needed specific for Backhaul Project
+################################################
  
 Backhaul_project:
   project_name: 'Backhaul'
+ 
+# source folder
   prj_source_folder_name: 'SkylifterSourceFiles'
   
+ # configuration template files in source folder
+  template_folder_name: 'Jinja2ConfigTemplates'
   jinja2_system_file_name: 'system_template_config.j2'
+  jinja2_isis_file_name: 'isis_template_config.j2'
+  jinja2_ospf_file_name: 'ospf_template_config.j2'
   jinja2_mpls_file_name: 'mpls_template_config.j2'
   jinja2_bgp_file_name: 'bgp_template_config.j2'
+  jinja2_service_file_name: 'service_template_config.j2'
   
+ # source excel file in source folder
   xlsx_file_name: 'Network_Information.xlsx'
   sheet_name: 'Interfaces'
   
+  # destination 
   prj_destination_folder_name: 'SkylifterDestFiles'
-  yaml_file_name: 'LSDataYAML'
-  py_file_name: 'LSData'
+  yaml_file_name: 'varYAMLData.yaml'
+  py_file_name: 'varPyData.py'
+  rpc_devop_file_name: 'devop_info'
+  tableviews_devop_file_name: 'table_info'

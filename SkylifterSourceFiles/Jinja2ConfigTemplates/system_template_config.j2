@@ -1,0 +1,30 @@
+{#	This template contains:
+		- system configuration: RE-FF, system, logging, authentication, etc
+		- groups configuration for different types of interfaces: loopback, customer, service, access, aggregation, core
+		- interface configuration with description and IP address
+#}
+ 
+ logical-systems { {% for ls_key, ls_vars in Logical_systems.iteritems() %}
+    {{ ls_key }} { {% for key, vars in ls_vars.iteritems() %} {% if key == "INTERFACES" %}
+       interfaces { {% for int_key, int_val in vars.iteritems() %} {% if int_val.ifd  == "lo0" %} 
+             {{ int_val.ifd }} {
+                unit {{ int_val.ifl }} {
+                    description {{ ls_key }}_{{ int_val.description }};
+                    family inet {
+                        address {{ int_val.ipv4_ifa }}/{{ int_val.ipv4_cidr}};
+                    }
+                 }
+             } {% else %}
+             {{ int_val.ifd }} {
+                unit {{ int_val.ifl }} {
+                    description {{ ls_key }}_{{ int_val.description }};
+                    vlan-id {{ int_val.ifl }};
+                    family inet {
+                        address {{ int_val.ipv4_ifa }}/{{ int_val.ipv4_cidr}};
+                    }
+                 }
+             } {% endif %} {% endfor %}
+        } 
+    } {% endif %} {% endfor %} {% endfor %}
+ } 
+ 

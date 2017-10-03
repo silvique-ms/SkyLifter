@@ -5,9 +5,11 @@
 
 
 #########################################################################
-This folder contains all the files generating using this tool:
+This folder contains all the files generated using this tool:
 - Config Files
 - Saved Files
 - Variable Files 
+- DevOp Files RPC
+- DevOp Files Table and Views
 
 #########################################################################
